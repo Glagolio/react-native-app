@@ -1,18 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Keyboard,
-} from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 
-const RegistrationScreen = () => {
+const LoginScreen = () => {
   const [hidenPassword, setHidePassword] = useState({ hide: true, text: 'Show' });
-  const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -40,28 +30,19 @@ const RegistrationScreen = () => {
   };
 
   const resetForm = () => {
-    setLogin('');
     setEmail('');
     setPassword('');
   };
 
   const handleSubmit = () => {
-    console.log({ login, email, password });
+    console.log({ email, password });
 
     resetForm();
   };
 
   return (
-    <KeyboardAvoidingView style={styles.registrationForm}>
-      <Image style={styles.avatar} source={require('../assets/defaultAvatar1.jpg')} />
-      <Text style={styles.text}>Реєстрація</Text>
-      <TextInput
-        style={styles.input__login}
-        placeholder={'Login'}
-        onFocus={() => setIsShowKeyboard(true)}
-        onChangeText={setLogin}
-        value={login}
-      />
+    <View style={styles.loginForm}>
+      <Text style={styles.text}>Войти</Text>
       <TextInput
         style={styles.input__login}
         placeholder={'Enter the email'}
@@ -69,9 +50,9 @@ const RegistrationScreen = () => {
         onChangeText={setEmail}
         value={email}
       />
-      <View style={{ ...styles.password, marginBottom: isShowKeyboard ? 32 : 0 }}>
+      <View style={{ ...styles.password, marginBottom: isShowKeyboard ? 40 : 0 }}>
         <TextInput
-          style={styles.input__login}
+          style={styles.input}
           secureTextEntry={hidenPassword.hide}
           dataDetectorTypes={'all'}
           placeholder={'Enter the password'}
@@ -84,46 +65,32 @@ const RegistrationScreen = () => {
       </View>
       {!isShowKeyboard && (
         <View style={styles.buttons}>
-          <TouchableOpacity style={styles.registrationButton} onPress={handleSubmit}>
-            <Text style={styles.registrationButton__text}>Зареєструватись</Text>
+          <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
+            <Text style={styles.loginButton__text}>Увійти</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.haveAccountButton}>
-            <Text style={styles.haveAccountButton__text}>Вже є аккаунт? Увійти</Text>
+            <Text style={styles.haveAccountButton__text}>Немає аккаунта? Зареєструватись</Text>
           </TouchableOpacity>
         </View>
       )}
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   text: {
-    marginTop: 92,
-    textAlign: 'center',
+    marginTop: 32,
     fontFamily: 'Roboto-Medium',
     fontSize: 30,
     lineHeight: 35.16,
   },
-  registrationForm: {
+  loginForm: {
     display: 'flex',
     alignItems: 'center',
-    position: 'relative',
     width: '100%',
-    // height: 549,
     backgroundColor: '#ffffff',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-  },
-  avatar: {
-    position: 'absolute',
-    left: '50%',
-    transform: [{ translateX: -50 }, { translateY: -50 }],
-    width: 120,
-    height: 120,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
   },
   input__login: {
     marginTop: 33,
@@ -146,7 +113,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
   input: {
-    marginBottom: 16,
+    marginTop: 16,
     borderColor: '#fff',
     width: 343,
     height: 50,
@@ -172,16 +139,7 @@ const styles = StyleSheet.create({
     right: 16,
     top: '50%',
   },
-  showPasswordButton__text: {
-    fontSize: 16,
-    fontFamily: 'Roboto-Regular',
-
-    fontWeight: '400',
-    lineHeight: 19,
-
-    color: '#1B4371',
-  },
-  registrationButton: {
+  loginButton: {
     marginTop: 43,
     width: 343,
     paddingVertical: 16,
@@ -189,7 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF6C00',
     borderRadius: 100,
   },
-  registrationButton__text: {
+  loginButton__text: {
     textAlign: 'center',
     color: '#FFFFFF',
     fontFamily: 'Roboto-Regular',
@@ -198,7 +156,6 @@ const styles = StyleSheet.create({
   },
   haveAccountButton: {
     marginTop: 16,
-    marginBottom: 78,
   },
   haveAccountButton__text: {
     fontSize: 16,
@@ -208,7 +165,8 @@ const styles = StyleSheet.create({
   },
   buttons: {
     alignItems: 'center',
+    marginBottom: 144,
   },
 });
 
-export default RegistrationScreen;
+export default LoginScreen;

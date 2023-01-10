@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import * as Font from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
@@ -7,16 +8,43 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import RegistrationScreen from './screens/RegistrationScreen';
+import LoginScreen from './screens/LoginScreen';
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await Font.loadAsync({
+          'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
+          'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+        });
+      } catch (err) {
+        console.warn(err.message);
+      } finally {
+        setIsReady(true);
+      }
+    }
+    prepare();
+  }, []);
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <ImageBackground style={styles.backgroundImage} source={require('./assets/photoBG.jpg')}>
-        <RegistrationScreen />
-      </ImageBackground>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <ImageBackground style={styles.backgroundImage} source={require('./assets/photoBG.jpg')}>
+          <LoginScreen />
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
