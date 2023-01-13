@@ -11,8 +11,20 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
+// import SCREENS
 import RegistrationScreen from "./screens/auth/RegistrationScreen";
 import LoginScreen from "./screens/auth/LoginScreen";
+import Home from "./screens/main/Home";
+import CommentsScreen from "./screens/main/CommentsScreen";
+import CreatePostScreen from "./screens/main/CreatePostScreen";
+import MapScreen from "./screens/main/MapScreen";
+import PostsScreen from "./screens/main/PostsScreen";
+import ProfileScreen from "./screens/main/ProfileScreen";
+
+const MainStack = createStackNavigator();
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
@@ -25,7 +37,7 @@ export default function App() {
           "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
         });
       } catch (err) {
-        console.warn(err.message);
+        console.log(err.message);
       } finally {
         setIsReady(true);
       }
@@ -38,42 +50,11 @@ export default function App() {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <ImageBackground
-          style={styles.backgroundImage}
-          source={require("./assets/photoBG.jpg")}
-        >
-          <KeyboardAvoidingView
-            style={styles.keyboard} // определяем ОС и настраиваем поведение клавиатуры
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
-          >
-            <LoginScreen />
-          </KeyboardAvoidingView>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+    <NavigationContainer>
+      <MainStack.Navigator initialRouteName="Login">
+        <MainStack.Screen name="Register" component={RegistrationScreen} />
+        <MainStack.Screen name="Login" component={LoginScreen} />
+      </MainStack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // alignItems: 'center',
-    backgroundColor: "#000",
-    // justifyContent: 'center',
-  },
-  backgroundImage: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-  },
-  text: {
-    color: "#fff",
-  },
-  keyboard: {
-    width: "100%",
-  },
-});
