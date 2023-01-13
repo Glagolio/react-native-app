@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -8,20 +8,23 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard,
-} from 'react-native';
+} from "react-native";
 
 const RegistrationScreen = () => {
-  const [hidenPassword, setHidePassword] = useState({ hide: true, text: 'Show' });
-  const [login, setLogin] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [hidenPassword, setHidePassword] = useState({
+    hide: true,
+    text: "Show",
+  });
+  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       setIsShowKeyboard(true);
     });
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
       setIsShowKeyboard(false);
     });
 
@@ -33,16 +36,16 @@ const RegistrationScreen = () => {
 
   const hidePassword = () => {
     if (hidenPassword.hide) {
-      setHidePassword({ hide: false, text: 'Hide' });
+      setHidePassword({ hide: false, text: "Hide" });
     } else {
-      setHidePassword({ hide: true, text: 'Show' });
+      setHidePassword({ hide: true, text: "Show" });
     }
   };
 
   const resetForm = () => {
-    setLogin('');
-    setEmail('');
-    setPassword('');
+    setLogin("");
+    setEmail("");
+    setPassword("");
   };
 
   const handleSubmit = () => {
@@ -53,42 +56,57 @@ const RegistrationScreen = () => {
 
   return (
     <KeyboardAvoidingView style={styles.registrationForm}>
-      <Image style={styles.avatar} source={require('../assets/defaultAvatar1.jpg')} />
+      <Image
+        style={styles.avatar}
+        source={require("../../assets/defaultAvatar1.jpg")}
+      />
       <Text style={styles.text}>Реєстрація</Text>
       <TextInput
         style={styles.input__login}
-        placeholder={'Login'}
+        placeholder={"Login"}
         onFocus={() => setIsShowKeyboard(true)}
         onChangeText={setLogin}
         value={login}
       />
       <TextInput
         style={styles.input__login}
-        placeholder={'Enter the email'}
-        dataDetectorTypes={'address'}
+        placeholder={"Enter the email"}
+        dataDetectorTypes={"address"}
         onChangeText={setEmail}
         value={email}
       />
-      <View style={{ ...styles.password, marginBottom: isShowKeyboard ? 32 : 0 }}>
+      <View
+        style={{ ...styles.password, marginBottom: isShowKeyboard ? 32 : 0 }}
+      >
         <TextInput
           style={styles.input__login}
           secureTextEntry={hidenPassword.hide}
-          dataDetectorTypes={'all'}
-          placeholder={'Enter the password'}
+          dataDetectorTypes={"all"}
+          placeholder={"Enter the password"}
           onChangeText={setPassword}
           value={password}
         />
-        <TouchableOpacity style={styles.showPasswordButton} onPress={hidePassword}>
-          <Text style={styles.showPasswordButton__text}>{hidenPassword.text}</Text>
+        <TouchableOpacity
+          style={styles.showPasswordButton}
+          onPress={hidePassword}
+        >
+          <Text style={styles.showPasswordButton__text}>
+            {hidenPassword.text}
+          </Text>
         </TouchableOpacity>
       </View>
       {!isShowKeyboard && (
         <View style={styles.buttons}>
-          <TouchableOpacity style={styles.registrationButton} onPress={handleSubmit}>
+          <TouchableOpacity
+            style={styles.registrationButton}
+            onPress={handleSubmit}
+          >
             <Text style={styles.registrationButton__text}>Зареєструватись</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.haveAccountButton}>
-            <Text style={styles.haveAccountButton__text}>Вже є аккаунт? Увійти</Text>
+            <Text style={styles.haveAccountButton__text}>
+              Вже є аккаунт? Увійти
+            </Text>
           </TouchableOpacity>
         </View>
       )}
@@ -99,24 +117,24 @@ const RegistrationScreen = () => {
 const styles = StyleSheet.create({
   text: {
     marginTop: 92,
-    textAlign: 'center',
-    fontFamily: 'Roboto-Medium',
+    textAlign: "center",
+    fontFamily: "Roboto-Medium",
     fontSize: 30,
     lineHeight: 35.16,
   },
   registrationForm: {
-    display: 'flex',
-    alignItems: 'center',
-    position: 'relative',
-    width: '100%',
+    display: "flex",
+    alignItems: "center",
+    position: "relative",
+    width: "100%",
     // height: 549,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
   avatar: {
-    position: 'absolute',
-    left: '50%',
+    position: "absolute",
+    left: "50%",
     transform: [{ translateX: -50 }, { translateY: -50 }],
     width: 120,
     height: 120,
@@ -127,72 +145,72 @@ const styles = StyleSheet.create({
   },
   input__login: {
     marginTop: 33,
-    borderColor: '#fff',
+    borderColor: "#fff",
     width: 343,
     height: 50,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: "#F6F6F6",
     borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#E8E8E8',
+    borderStyle: "solid",
+    borderColor: "#E8E8E8",
     borderRadius: 8,
 
     paddingHorizontal: 16,
     paddingVertical: 16,
 
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
 
-    fontWeight: '400',
+    fontWeight: "400",
     lineHeight: 19,
   },
   input: {
     marginBottom: 16,
-    borderColor: '#fff',
+    borderColor: "#fff",
     width: 343,
     height: 50,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: "#F6F6F6",
     borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#E8E8E8',
+    borderStyle: "solid",
+    borderColor: "#E8E8E8",
     borderRadius: 8,
 
     paddingHorizontal: 16,
     paddingVertical: 16,
 
     fontSize: 16,
-    fontWeight: '400',
-    fontFamily: 'Roboto-Regular',
+    fontWeight: "400",
+    fontFamily: "Roboto-Regular",
     lineHeight: 19,
   },
   password: {
-    position: 'relative',
+    position: "relative",
   },
   showPasswordButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
-    top: '50%',
+    top: "50%",
   },
   showPasswordButton__text: {
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
 
-    fontWeight: '400',
+    fontWeight: "400",
     lineHeight: 19,
 
-    color: '#1B4371',
+    color: "#1B4371",
   },
   registrationButton: {
     marginTop: 43,
     width: 343,
     paddingVertical: 16,
 
-    backgroundColor: '#FF6C00',
+    backgroundColor: "#FF6C00",
     borderRadius: 100,
   },
   registrationButton__text: {
-    textAlign: 'center',
-    color: '#FFFFFF',
-    fontFamily: 'Roboto-Regular',
+    textAlign: "center",
+    color: "#FFFFFF",
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
   },
@@ -202,12 +220,12 @@ const styles = StyleSheet.create({
   },
   haveAccountButton__text: {
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
     lineHeight: 19,
-    color: '#1B4371',
+    color: "#1B4371",
   },
   buttons: {
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
 

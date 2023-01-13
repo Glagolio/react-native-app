@@ -1,17 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Keyboard } from 'react-native';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+} from "react-native";
 
 const LoginScreen = () => {
-  const [hidenPassword, setHidePassword] = useState({ hide: true, text: 'Show' });
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [hidenPassword, setHidePassword] = useState({
+    hide: true,
+    text: "Show",
+  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       setIsShowKeyboard(true);
     });
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
       setIsShowKeyboard(false);
     });
 
@@ -23,15 +33,15 @@ const LoginScreen = () => {
 
   const hidePassword = () => {
     if (hidenPassword.hide) {
-      setHidePassword({ hide: false, text: 'Hide' });
+      setHidePassword({ hide: false, text: "Hide" });
     } else {
-      setHidePassword({ hide: true, text: 'Show' });
+      setHidePassword({ hide: true, text: "Show" });
     }
   };
 
   const resetForm = () => {
-    setEmail('');
-    setPassword('');
+    setEmail("");
+    setPassword("");
   };
 
   const handleSubmit = () => {
@@ -45,22 +55,29 @@ const LoginScreen = () => {
       <Text style={styles.text}>Войти</Text>
       <TextInput
         style={styles.input__login}
-        placeholder={'Enter the email'}
-        dataDetectorTypes={'address'}
+        placeholder={"Enter the email"}
+        dataDetectorTypes={"address"}
         onChangeText={setEmail}
         value={email}
       />
-      <View style={{ ...styles.password, marginBottom: isShowKeyboard ? 40 : 0 }}>
+      <View
+        style={{ ...styles.password, marginBottom: isShowKeyboard ? 40 : 0 }}
+      >
         <TextInput
           style={styles.input}
           secureTextEntry={hidenPassword.hide}
-          dataDetectorTypes={'all'}
-          placeholder={'Enter the password'}
+          dataDetectorTypes={"all"}
+          placeholder={"Enter the password"}
           onChangeText={setPassword}
           value={password}
         />
-        <TouchableOpacity style={styles.showPasswordButton} onPress={hidePassword}>
-          <Text style={styles.showPasswordButton__text}>{hidenPassword.text}</Text>
+        <TouchableOpacity
+          style={styles.showPasswordButton}
+          onPress={hidePassword}
+        >
+          <Text style={styles.showPasswordButton__text}>
+            {hidenPassword.text}
+          </Text>
         </TouchableOpacity>
       </View>
       {!isShowKeyboard && (
@@ -69,7 +86,9 @@ const LoginScreen = () => {
             <Text style={styles.loginButton__text}>Увійти</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.haveAccountButton}>
-            <Text style={styles.haveAccountButton__text}>Немає аккаунта? Зареєструватись</Text>
+            <Text style={styles.haveAccountButton__text}>
+              Немає аккаунта? Зареєструватись
+            </Text>
           </TouchableOpacity>
         </View>
       )}
@@ -80,77 +99,77 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   text: {
     marginTop: 32,
-    fontFamily: 'Roboto-Medium',
+    fontFamily: "Roboto-Medium",
     fontSize: 30,
     lineHeight: 35.16,
   },
   loginForm: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: '#ffffff',
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
   input__login: {
     marginTop: 33,
-    borderColor: '#fff',
+    borderColor: "#fff",
     width: 343,
     height: 50,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: "#F6F6F6",
     borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#E8E8E8',
+    borderStyle: "solid",
+    borderColor: "#E8E8E8",
     borderRadius: 8,
 
     paddingHorizontal: 16,
     paddingVertical: 16,
 
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
 
-    fontWeight: '400',
+    fontWeight: "400",
     lineHeight: 19,
   },
   input: {
     marginTop: 16,
-    borderColor: '#fff',
+    borderColor: "#fff",
     width: 343,
     height: 50,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: "#F6F6F6",
     borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#E8E8E8',
+    borderStyle: "solid",
+    borderColor: "#E8E8E8",
     borderRadius: 8,
 
     paddingHorizontal: 16,
     paddingVertical: 16,
 
     fontSize: 16,
-    fontWeight: '400',
-    fontFamily: 'Roboto-Regular',
+    fontWeight: "400",
+    fontFamily: "Roboto-Regular",
     lineHeight: 19,
   },
   password: {
-    position: 'relative',
+    position: "relative",
   },
   showPasswordButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
-    top: '50%',
+    top: "50%",
   },
   loginButton: {
     marginTop: 43,
     width: 343,
     paddingVertical: 16,
 
-    backgroundColor: '#FF6C00',
+    backgroundColor: "#FF6C00",
     borderRadius: 100,
   },
   loginButton__text: {
-    textAlign: 'center',
-    color: '#FFFFFF',
-    fontFamily: 'Roboto-Regular',
+    textAlign: "center",
+    color: "#FFFFFF",
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
   },
@@ -159,12 +178,12 @@ const styles = StyleSheet.create({
   },
   haveAccountButton__text: {
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
     lineHeight: 19,
-    color: '#1B4371',
+    color: "#1B4371",
   },
   buttons: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 144,
   },
 });
