@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
+import { NavigationContainer } from "@react-navigation/native";
+
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -11,24 +13,12 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-
-// import SCREENS
-import RegistrationScreen from "./screens/auth/RegistrationScreen";
-import LoginScreen from "./screens/auth/LoginScreen";
-import Home from "./screens/main/Home";
-import CommentsScreen from "./screens/main/CommentsScreen";
-import CreatePostScreen from "./screens/main/CreatePostScreen";
-import MapScreen from "./screens/main/MapScreen";
-import PostsScreen from "./screens/main/PostsScreen";
-import ProfileScreen from "./screens/main/ProfileScreen";
-
-const MainStack = createStackNavigator();
+import useRoute from "./routers";
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-
+  const [isLogin, setIsLogin] = useState(true);
+  const route = useRoute(isLogin);
   useEffect(() => {
     async function prepare() {
       try {
@@ -49,20 +39,5 @@ export default function App() {
     return null;
   }
 
-  return (
-    <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Login">
-        <MainStack.Screen
-          name="Register"
-          options={{ headerShown: false }}
-          component={RegistrationScreen}
-        />
-        <MainStack.Screen
-          name="Login"
-          options={{ headerShown: false }}
-          component={LoginScreen}
-        />
-      </MainStack.Navigator>
-    </NavigationContainer>
-  );
+  return <NavigationContainer>{route}</NavigationContainer>;
 }

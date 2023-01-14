@@ -52,6 +52,7 @@ const RegistrationScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     console.log({ login, email, password });
+    navigation.navigate("Login");
 
     resetForm();
   };
