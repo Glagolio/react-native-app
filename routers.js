@@ -1,4 +1,5 @@
 import React from "react";
+import { AntDesign, Fontisto, Feather } from "@expo/vector-icons";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -34,7 +35,10 @@ const useRoute = (isLogin) => {
     );
   }
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{ tabBarShowLabel: false }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
@@ -46,10 +50,33 @@ const useRoute = (isLogin) => {
       <Tab.Screen
         name="Posts"
         component={PostsScreen}
-        options={{ title: "Публікації" }}
+        options={{
+          title: "Публікації",
+          tabBarIcon: ({ focused, size, color }) => (
+            <AntDesign name="appstore-o" size={24} color="black" />
+          ),
+        }}
       />
-      <Tab.Screen name="Створити пост" component={CreatePostScreen} />
-      <Tab.Screen name="Профайл" component={ProfileScreen} />
+      <Tab.Screen
+        name="CreatePost"
+        component={CreatePostScreen}
+        options={{
+          title: "Створити публікацію",
+          tabBarIcon: ({ focused, size, color }) => (
+            <Fontisto name="plus-a" size={24} color="black" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ focused, size, color }) => (
+            <Feather name="user" size={24} color="black" />
+          ),
+          headerShown: false,
+        }}
+      />
     </Tab.Navigator>
   );
 };
