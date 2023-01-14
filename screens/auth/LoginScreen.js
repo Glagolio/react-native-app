@@ -6,9 +6,13 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  ImageBackground,
 } from "react-native";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [hidenPassword, setHidePassword] = useState({
     hide: true,
     text: "Show",
@@ -51,52 +55,94 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.loginForm}>
-      <Text style={styles.text}>Войти</Text>
-      <TextInput
-        style={styles.input__login}
-        placeholder={"Enter the email"}
-        dataDetectorTypes={"address"}
-        onChangeText={setEmail}
-        value={email}
-      />
-      <View
-        style={{ ...styles.password, marginBottom: isShowKeyboard ? 40 : 0 }}
-      >
-        <TextInput
-          style={styles.input}
-          secureTextEntry={hidenPassword.hide}
-          dataDetectorTypes={"all"}
-          placeholder={"Enter the password"}
-          onChangeText={setPassword}
-          value={password}
-        />
-        <TouchableOpacity
-          style={styles.showPasswordButton}
-          onPress={hidePassword}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <ImageBackground
+          style={styles.backgroundImage}
+          source={require("../../assets/photoBG.jpg")}
         >
-          <Text style={styles.showPasswordButton__text}>
-            {hidenPassword.text}
-          </Text>
-        </TouchableOpacity>
+          <KeyboardAvoidingView
+            style={styles.keyboard}
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          >
+            <View style={styles.loginForm}>
+              <Text style={styles.text}>Войти</Text>
+              <TextInput
+                style={styles.input__login}
+                placeholder={"Enter the email"}
+                dataDetectorTypes={"address"}
+                onChangeText={setEmail}
+                value={email}
+              />
+              <View
+                style={{
+                  ...styles.password,
+                  marginBottom: isShowKeyboard ? 40 : 0,
+                }}
+              >
+                <TextInput
+                  style={styles.input}
+                  secureTextEntry={hidenPassword.hide}
+                  dataDetectorTypes={"all"}
+                  placeholder={"Enter the password"}
+                  onChangeText={setPassword}
+                  value={password}
+                />
+                <TouchableOpacity
+                  style={styles.showPasswordButton}
+                  onPress={hidePassword}
+                >
+                  <Text style={styles.showPasswordButton__text}>
+                    {hidenPassword.text}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {!isShowKeyboard && (
+                <View style={styles.buttons}>
+                  <TouchableOpacity
+                    style={styles.loginButton}
+                    onPress={handleSubmit}
+                  >
+                    <Text style={styles.loginButton__text}>Увійти</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.haveAccountButton}>
+                    <Text
+                      style={styles.haveAccountButton__text}
+                      onPress={() => navigation.navigate("Register")}
+                    >
+                      Немає аккаунта? Зареєструватись
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
       </View>
-      {!isShowKeyboard && (
-        <View style={styles.buttons}>
-          <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
-            <Text style={styles.loginButton__text}>Увійти</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.haveAccountButton}>
-            <Text style={styles.haveAccountButton__text}>
-              Немає аккаунта? Зареєструватись
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // alignItems: 'center',
+    backgroundColor: "#000",
+    // justifyContent: 'center',
+  },
+  backgroundImage: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+  },
+  text: {
+    color: "#fff",
+  },
+  keyboard: {
+    width: "100%",
+  },
   text: {
     marginTop: 32,
     fontFamily: "Roboto-Medium",
