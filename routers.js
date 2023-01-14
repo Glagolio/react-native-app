@@ -1,6 +1,7 @@
 import React from "react";
-import { AntDesign, Fontisto, Feather } from "@expo/vector-icons";
-
+import { StyleSheet, Button, Link } from "react-native";
+import { AntDesign, Fontisto, Feather, Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -13,12 +14,14 @@ import CreatePostScreen from "./screens/main/CreatePostScreen";
 import MapScreen from "./screens/main/MapScreen";
 import PostsScreen from "./screens/main/PostsScreen";
 import ProfileScreen from "./screens/main/ProfileScreen";
+import BackArrow from "./components/BackArrow";
+import LogoutIcon from "./components/LogoutIcon";
 
 const MainStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const useRoute = (isLogin) => {
-  if (!isLogin) {
+const useRoute = (isAuth) => {
+  if (!isAuth) {
     return (
       <MainStack.Navigator initialRouteName="Login">
         <MainStack.Screen
@@ -45,6 +48,7 @@ const useRoute = (isLogin) => {
         options={{
           title: "Публікації",
           tabBarButton: () => null,
+          headerRight: () => <LogoutIcon style={{ marginRight: 20 }} />,
         }}
       />
       <Tab.Screen
@@ -63,8 +67,14 @@ const useRoute = (isLogin) => {
         options={{
           title: "Створити публікацію",
           tabBarIcon: ({ focused, size, color }) => (
-            <Fontisto name="plus-a" size={24} color="black" />
+            <Fontisto
+              name="plus-a"
+              size={24}
+              color="white"
+              style={styles.createPostIcon}
+            />
           ),
+          headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
         }}
       />
       <Tab.Screen
@@ -82,3 +92,11 @@ const useRoute = (isLogin) => {
 };
 
 export default useRoute;
+
+const styles = StyleSheet.create({
+  createPostIcon: {
+    backgroundColor: "#FF6C00",
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+  },
+});
