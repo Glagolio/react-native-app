@@ -18,7 +18,6 @@ import useRoute from "./routers";
 export default function App() {
   const [isReady, setIsReady] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-  const route = useRoute(isLogin);
   useEffect(() => {
     async function prepare() {
       try {
@@ -34,6 +33,11 @@ export default function App() {
     }
     prepare();
   }, []);
+
+  const onPressLogout = () => {
+    setIsLogin(false);
+  };
+  const route = useRoute(isLogin, onPressLogout);
 
   if (!isReady) {
     return null;

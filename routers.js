@@ -20,7 +20,7 @@ import LogoutIcon from "./components/LogoutIcon";
 const MainStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const useRoute = (isAuth) => {
+const useRoute = (isAuth, onPress) => {
   if (!isAuth) {
     return (
       <MainStack.Navigator initialRouteName="Login">
@@ -48,7 +48,9 @@ const useRoute = (isAuth) => {
         options={{
           title: "Публікації",
           tabBarButton: () => null,
-          headerRight: () => <LogoutIcon style={{ marginRight: 20 }} />,
+          headerRight: () => (
+            <LogoutIcon style={{ marginRight: 20 }} onPress={onPress} />
+          ),
         }}
       />
       <Tab.Screen

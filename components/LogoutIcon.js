@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 // TODO: change auth status to false onPress
-const LogoutIcon = ({ style }) => {
+const LogoutIcon = ({ style, onPress }) => {
   const navigation = useNavigation();
   return (
     <Ionicons
@@ -11,7 +11,7 @@ const LogoutIcon = ({ style }) => {
       size={24}
       color="#BDBDBD"
       style={style}
-      onPress={() => alert("LOGOUT DONE")}
+      onPress={onPress}
     />
   );
 };
