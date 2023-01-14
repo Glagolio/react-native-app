@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Button, Link } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { AntDesign, Fontisto, Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -16,9 +16,23 @@ import PostsScreen from "./screens/main/PostsScreen";
 import ProfileScreen from "./screens/main/ProfileScreen";
 import BackArrow from "./components/BackArrow";
 import LogoutIcon from "./components/LogoutIcon";
+import CreactePostButton from "./components/CreatePostButton";
 
 const MainStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const CreateRoute = () => {
+  return (
+    <View style={styles.background}>
+      <Fontisto
+        name="plus-a"
+        size={24}
+        color="white"
+        style={styles.createPostIcon}
+      />
+    </View>
+  );
+};
 
 const useRoute = (isAuth, onPress) => {
   if (!isAuth) {
@@ -68,14 +82,7 @@ const useRoute = (isAuth, onPress) => {
         component={CreatePostScreen}
         options={{
           title: "Створити публікацію",
-          tabBarIcon: ({ focused, size, color }) => (
-            <Fontisto
-              name="plus-a"
-              size={24}
-              color="white"
-              style={styles.createPostIcon}
-            />
-          ),
+          tabBarIcon: ({ focused, size, color }) => <CreactePostButton />,
           headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
         }}
       />
@@ -97,8 +104,12 @@ export default useRoute;
 
 const styles = StyleSheet.create({
   createPostIcon: {
-    backgroundColor: "#FF6C00",
     paddingHorizontal: 18,
     paddingVertical: 10,
+  },
+  background: {
+    backgroundColor: "#FF6C00",
+
+    borderRadius: 20,
   },
 });
