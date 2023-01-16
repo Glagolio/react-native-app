@@ -17,7 +17,7 @@ import BackArrow from "../../components/BackArrow";
 import LogoutIcon from "../../components/LogoutIcon";
 import CreactePostButton from "../../components/CreatePostButton";
 
-const MainStack = createStackNavigator();
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Home = ({ onPress }) => {
@@ -46,6 +46,7 @@ const Home = ({ onPress }) => {
           title: "Створити публікацію",
           tabBarIcon: ({ focused, size, color }) => <CreactePostButton />,
           headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
+          tabBarStyle: { display: "none" },
         }}
       />
       <Tab.Screen

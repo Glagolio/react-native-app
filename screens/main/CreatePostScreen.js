@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
 import { MaterialIcons, EvilIcons, Feather } from "@expo/vector-icons";
 
-const CreatePostScreen = () => {
+const CreatePostScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [image, setImage] = useState(null);
@@ -25,7 +26,21 @@ const CreatePostScreen = () => {
 
       setHasPermission(status === "granted");
     })();
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+    })();
   }, []);
+
+  const resetForm = () => {
+    setImage(null);
+    setNameOfPhoto("");
+    setLocationOfPhoto("");
+  };
+  const isDisabled = !image || nameOfPhoto === "" || locationOfPhoto === "";
 
   if (hasPermission === null) {
     return <View />;
@@ -33,8 +48,6 @@ const CreatePostScreen = () => {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
-
-  const isDisabled = !image || nameOfPhoto === "" || locationOfPhoto === "";
 
   return (
     <View style={styles.container}>
@@ -99,6 +112,17 @@ const CreatePostScreen = () => {
             : styles.submitBtn
         }
         disabled={isDisabled}
+        onPress={async () => {
+          const location = await Location.getCurrentPositionAsync({});
+          navigation.navigate("Posts", {
+            image,
+            name: nameOfPhoto,
+            nameOfLocation: locationOfPhoto,
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          });
+          resetForm();
+        }}
       >
         <Text
           style={
@@ -110,14 +134,7 @@ const CreatePostScreen = () => {
           Опублікувати
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.cancelBtn}
-        onPress={() => {
-          setImage(null);
-          setNameOfPhoto("");
-          setLocationOfPhoto("");
-        }}
-      >
+      <TouchableOpacity style={styles.cancelBtn} onPress={resetForm}>
         <Feather name="trash" size={24} color="#BDBDBD" />
       </TouchableOpacity>
     </View>
