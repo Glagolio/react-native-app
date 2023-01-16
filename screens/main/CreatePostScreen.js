@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import { MaterialIcons, EvilIcons } from "@expo/vector-icons";
+import { MaterialIcons, EvilIcons, Feather } from "@expo/vector-icons";
 
 const CreatePostScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -33,6 +33,8 @@ const CreatePostScreen = () => {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
+  const isDisabled = !image || nameOfPhoto === "" || locationOfPhoto === "";
 
   return (
     <View style={styles.container}>
@@ -67,7 +69,9 @@ const CreatePostScreen = () => {
           <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
         </TouchableOpacity>
       </Camera>
-      <Text style={styles.hint}>Зробіть фото</Text>
+      <Text style={styles.hint}>
+        {image ? "Редагуйте фото" : "Зробіть фото"}
+      </Text>
       <TextInput
         style={styles.input__name}
         placeholder={"Назва..."}
@@ -88,8 +92,33 @@ const CreatePostScreen = () => {
           style={styles.icon__location}
         />
       </View>
-      <TouchableOpacity style={styles.submitBtn}>
-        <Text style={styles.submitBtn__text}>Опублікувати</Text>
+      <TouchableOpacity
+        style={
+          isDisabled
+            ? { ...styles.submitBtn, backgroundColor: "#F6F6F6" }
+            : styles.submitBtn
+        }
+        disabled={isDisabled}
+      >
+        <Text
+          style={
+            isDisabled
+              ? { ...styles.submitBtn__text, color: "#BDBDBD" }
+              : styles.submitBtn__text
+          }
+        >
+          Опублікувати
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.cancelBtn}
+        onPress={() => {
+          setImage(null);
+          setNameOfPhoto("");
+          setLocationOfPhoto("");
+        }}
+      >
+        <Feather name="trash" size={24} color="#BDBDBD" />
       </TouchableOpacity>
     </View>
   );
@@ -187,6 +216,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     fontFamily: "Roboto-Regular",
+  },
+  cancelBtn: {
+    marginTop: "auto",
+    marginBottom: 34,
+    alignSelf: "center",
+    paddingHorizontal: 23,
+    paddingVertical: 8,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 20,
   },
 });
 
