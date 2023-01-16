@@ -55,6 +55,7 @@ const Home = ({ onPress }) => {
         options={{
           title: "Коментарі",
           headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
+          tabBarButton: () => null,
         }}
       />
       <Tab.Screen
@@ -63,6 +64,7 @@ const Home = ({ onPress }) => {
         options={{
           title: "Мапа",
           headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
+          tabBarButton: () => null,
         }}
       />
       <Tab.Screen
