@@ -40,6 +40,19 @@ const CreatePostScreen = ({ navigation }) => {
     setNameOfPhoto("");
     setLocationOfPhoto("");
   };
+
+  const sendPhoto = async () => {
+    const location = await Location.getCurrentPositionAsync({});
+    navigation.navigate("Posts", {
+      image,
+      name: nameOfPhoto,
+      nameOfLocation: locationOfPhoto,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+    resetForm();
+  };
+
   const isDisabled = !image || nameOfPhoto === "" || locationOfPhoto === "";
 
   if (hasPermission === null) {
@@ -112,17 +125,7 @@ const CreatePostScreen = ({ navigation }) => {
             : styles.submitBtn
         }
         disabled={isDisabled}
-        onPress={async () => {
-          const location = await Location.getCurrentPositionAsync({});
-          navigation.navigate("Posts", {
-            image,
-            name: nameOfPhoto,
-            nameOfLocation: locationOfPhoto,
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          });
-          resetForm();
-        }}
+        onPress={sendPhoto}
       >
         <Text
           style={
