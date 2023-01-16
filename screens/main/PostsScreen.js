@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import PostsListItem from "../../components/PostsListItem";
 
 const PostsScreen = ({ route }) => {
   const [posts, setPosts] = useState([]);
@@ -11,6 +19,7 @@ const PostsScreen = ({ route }) => {
     setPosts((prevState) => [...prevState, route.params]);
     console.log("posts", posts);
   }, [route]);
+
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
@@ -23,6 +32,12 @@ const PostsScreen = ({ route }) => {
           <Text style={styles.email}>email@example.com</Text>
         </View>
       </View>
+      <FlatList
+        data={posts}
+        style={styles.postsList}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <PostsListItem item={item} />}
+      />
     </View>
   );
 };
@@ -54,6 +69,27 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 13,
     color: "rgba(33, 33, 33, 0.8)",
+  },
+  postsList: {
+    marginTop: 32,
+    marginHorizontal: 16,
+  },
+  photo: {
+    width: "100%",
+    height: "100%",
+    marginBottom: 8,
+  },
+  title: {
+    marginBottom: 11,
+    fontSize: 16,
+    lineHeight: 19,
+    fontFamily: "Roboto-Regular",
+  },
+  comments: {
+    fontSize: 16,
+    lineHeight: 19,
+    fontFamily: "Roboto-Regular",
+    color: "#BDBDBD",
   },
 });
 

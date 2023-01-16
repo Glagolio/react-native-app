@@ -6,6 +6,10 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -18,6 +22,21 @@ const CreatePostScreen = ({ navigation }) => {
   const [image, setImage] = useState(null);
   const [nameOfPhoto, setNameOfPhoto] = useState("");
   const [locationOfPhoto, setLocationOfPhoto] = useState("");
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setIsShowKeyboard(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setIsShowKeyboard(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -63,84 +82,97 @@ const CreatePostScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Camera
-        style={styles.camera}
-        type={Camera.Constants.Type.back}
-        ref={(ref) => {
-          setCameraRef(ref);
-        }}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
       >
-        {image && (
-          <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: image }}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </View>
-        )}
-        {/* <Image styles={styles.preview} source={} /> */}
-        <TouchableOpacity
-          style={image ? { ...styles.snap, opacity: 0.3 } : styles.snap}
-          onPress={async () => {
-            if (cameraRef) {
-              const { uri } = await cameraRef.takePictureAsync();
-              console.log(cameraRef);
-              console.log("uri", uri);
-              setImage(uri);
-              // await MediaLibrary.createAssetAsync(uri);
-            }
+        <Camera
+          style={styles.camera}
+          type={Camera.Constants.Type.back}
+          ref={(ref) => {
+            setCameraRef(ref);
           }}
         >
-          <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
-        </TouchableOpacity>
-      </Camera>
-      <Text style={styles.hint}>
-        {image ? "Редагуйте фото" : "Зробіть фото"}
-      </Text>
-      <TextInput
-        style={styles.input__name}
-        placeholder={"Назва..."}
-        onChangeText={setNameOfPhoto}
-        value={nameOfPhoto}
-      />
-      <View style={styles.input__field}>
-        <TextInput
-          style={styles.input__location}
-          placeholder={"Місцевість"}
-          onChangeText={setLocationOfPhoto}
-          value={locationOfPhoto}
-        />
-        <EvilIcons
-          name="location"
-          size={24}
-          color="#BDBDBD"
-          style={styles.icon__location}
-        />
-      </View>
-      <TouchableOpacity
-        style={
-          isDisabled
-            ? { ...styles.submitBtn, backgroundColor: "#F6F6F6" }
-            : styles.submitBtn
-        }
-        disabled={isDisabled}
-        onPress={sendPhoto}
-      >
-        <Text
-          style={
-            isDisabled
-              ? { ...styles.submitBtn__text, color: "#BDBDBD" }
-              : styles.submitBtn__text
-          }
-        >
-          Опублікувати
+          {image && (
+            <View style={styles.imageContainer}>
+              <Image
+                source={{ uri: image }}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </View>
+          )}
+          {/* <Image styles={styles.preview} source={} /> */}
+          <TouchableOpacity
+            style={image ? { ...styles.snap, opacity: 0.3 } : styles.snap}
+            onPress={async () => {
+              if (cameraRef) {
+                const { uri } = await cameraRef.takePictureAsync();
+                console.log(cameraRef);
+                console.log("uri", uri);
+                setImage(uri);
+                // await MediaLibrary.createAssetAsync(uri);
+              }
+            }}
+          >
+            <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
+          </TouchableOpacity>
+        </Camera>
+        <Text style={styles.hint}>
+          {image ? "Редагуйте фото" : "Зробіть фото"}
         </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.cancelBtn} onPress={resetForm}>
-        <Feather name="trash" size={24} color="#BDBDBD" />
-      </TouchableOpacity>
-    </View>
+        <TextInput
+          style={styles.input__name}
+          placeholder={"Назва..."}
+          onChangeText={setNameOfPhoto}
+          value={nameOfPhoto}
+        />
+        <View style={styles.input__field}>
+          <TextInput
+            style={
+              !isShowKeyboard
+                ? { ...styles.input__location, marginBottom: 8 }
+                : styles.input__location
+            }
+            placeholder={"Місцевість"}
+            onChangeText={setLocationOfPhoto}
+            value={locationOfPhoto}
+          />
+          <EvilIcons
+            name="location"
+            size={24}
+            color="#BDBDBD"
+            style={styles.icon__location}
+          />
+        </View>
+        {!isShowKeyboard && (
+          <>
+            <TouchableOpacity
+              style={
+                isDisabled
+                  ? { ...styles.submitBtn, backgroundColor: "#F6F6F6" }
+                  : styles.submitBtn
+              }
+              disabled={isDisabled}
+              onPress={sendPhoto}
+            >
+              <Text
+                style={
+                  isDisabled
+                    ? { ...styles.submitBtn__text, color: "#BDBDBD" }
+                    : styles.submitBtn__text
+                }
+              >
+                Опублікувати
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancelBtn} onPress={resetForm}>
+              <Feather name="trash" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          </>
+        )}
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 

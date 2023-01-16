@@ -50,6 +50,22 @@ const Home = ({ onPress }) => {
         }}
       />
       <Tab.Screen
+        name="Comments"
+        component={CommentsScreen}
+        options={{
+          title: "Коментарі",
+          headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
+        }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          title: "Мапа",
+          headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
+        }}
+      />
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
