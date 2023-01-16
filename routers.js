@@ -21,19 +21,6 @@ import CreactePostButton from "./components/CreatePostButton";
 const MainStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const CreateRoute = () => {
-  return (
-    <View style={styles.background}>
-      <Fontisto
-        name="plus-a"
-        size={24}
-        color="white"
-        style={styles.createPostIcon}
-      />
-    </View>
-  );
-};
-
 const useRoute = (isAuth, onPress) => {
   if (!isAuth) {
     return (
@@ -51,53 +38,7 @@ const useRoute = (isAuth, onPress) => {
       </MainStack.Navigator>
     );
   }
-  return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={{ tabBarShowLabel: false }}
-    >
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          title: "Публікації",
-          tabBarButton: () => null,
-          headerRight: () => (
-            <LogoutIcon style={{ marginRight: 20 }} onPress={onPress} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Posts"
-        component={PostsScreen}
-        options={{
-          title: "Публікації",
-          tabBarIcon: ({ focused, size, color }) => (
-            <AntDesign name="appstore-o" size={24} color="black" />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="CreatePost"
-        component={CreatePostScreen}
-        options={{
-          title: "Створити публікацію",
-          tabBarIcon: ({ focused, size, color }) => <CreactePostButton />,
-          headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          tabBarIcon: ({ focused, size, color }) => (
-            <Feather name="user" size={24} color="black" />
-          ),
-          headerShown: false,
-        }}
-      />
-    </Tab.Navigator>
-  );
+  return <Home onPress={onPress} />;
 };
 
 export default useRoute;

@@ -10,7 +10,7 @@ const BackArrow = ({ style }) => {
       size={24}
       color="#BDBDBD"
       style={style}
-      onPress={() => navigation.navigate("Home")}
+      onPress={() => navigation.navigate("Posts")}
     />
   );
 };

@@ -24,6 +24,7 @@ export default function App() {
         await Font.loadAsync({
           "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
           "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+          "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
         });
       } catch (err) {
         console.log(err.message);
