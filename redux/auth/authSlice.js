@@ -19,6 +19,13 @@ const authSlice = createSlice({
       isAuth: true,
       userId: payload.uid,
     }),
+    authLogiIn: (state, { payload }) => ({
+      ...state,
+      isAuth: true,
+    }),
+    authSignOut: (state) => ({
+      ...initialState,
+    }),
   },
 });
 

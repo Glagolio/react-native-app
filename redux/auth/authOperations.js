@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  onAuthStateChange,
+  signOut,
 } from "firebase/auth";
 import authSlice from "./authSlice";
 
@@ -41,14 +41,23 @@ export const authSignIn = (email, password) => async (dispatch, getSatte) => {
 export const authStateChangeUser = () => async (dispatch, getSatte) => {
   try {
     const auth = getAuth();
-    await onAuthStateChange(auth, (user) => {
-      if (user) {
-        dispatch(authSlice.actions.authSignIn(user));
-      }
-    });
+    const user = auth.currentUser;
+
+    if (user) {
+      dispatch(authSlice.actions.authSignIn(user));
+      dispatch(authSlice.actions.authLogiIn(true));
+    }
   } catch (err) {
     console.log("error", err.message);
   }
 };
 
-export const authSignOut = () => async (dispatch, getSatte) => {};
+export const authSignOut = () => async (dispatch, getSatte) => {
+  try {
+    const auth = getAuth();
+    await signOut(auth);
+    dispatch(authSlice.actions.authSignOut());
+  } catch (err) {
+    console.log("error", err.message);
+  }
+};

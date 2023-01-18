@@ -21,7 +21,7 @@ import CreactePostButton from "./components/CreatePostButton";
 const MainStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const useRoute = (isAuth, onPress) => {
+const useRoute = (isAuth) => {
   if (!isAuth) {
     return (
       <MainStack.Navigator initialRouteName="Login">
@@ -38,7 +38,7 @@ const useRoute = (isAuth, onPress) => {
       </MainStack.Navigator>
     );
   }
-  return <Home onPress={onPress} />;
+  return <Home />;
 };
 
 export default useRoute;

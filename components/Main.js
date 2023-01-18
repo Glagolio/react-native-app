@@ -9,19 +9,15 @@ import { useDispatch } from "react-redux";
 import useRoute from "../routers";
 
 const Main = () => {
-  const [isLogin, setIsLogin] = useState(false);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(authStateChangeUser());
-    console.log("useEffect working");
   }, []);
-  // db.auth().onAuthStateChange((state) => setIsLogin(state));
-  const onPressLogout = () => {
-    setIsLogin(false);
-  };
-  const route = useRoute(isAuth, onPressLogout);
+
+  const user = useSelector((state) => state.auth.isAuth);
+
+  const route = useRoute(user);
 
   return <NavigationContainer>{route}</NavigationContainer>;
 };
