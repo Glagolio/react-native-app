@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useId } from "react";
 
 const initialState = {
   login: "",
   email: "",
   isAuth: false,
+  userId: null,
 };
 
 const authSlice = createSlice({
@@ -15,6 +17,7 @@ const authSlice = createSlice({
       login: payload.displayName,
       email: payload.email,
       isAuth: true,
+      userId: payload.uid,
     }),
   },
 });
