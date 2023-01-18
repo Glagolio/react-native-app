@@ -145,6 +145,7 @@ const CreatePostScreen = ({ navigation }) => {
             style={styles.icon__location}
           />
         </View>
+
         {!isShowKeyboard && (
           <>
             <TouchableOpacity

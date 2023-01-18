@@ -11,6 +11,9 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
 } from "react-native";
+import {} from "../../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
+import { authSignIn } from "../../redux/auth/authOperations";
 
 const LoginScreen = ({ navigation }) => {
   const [hidenPassword, setHidePassword] = useState({
@@ -20,6 +23,8 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -50,6 +55,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     console.log({ email, password });
+    dispatch(authSignIn(email, password));
 
     resetForm();
   };
