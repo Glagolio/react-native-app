@@ -1,13 +1,10 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { AntDesign, Fontisto, Feather, Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
+import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // import SCREENS
-import RegistrationScreen from "../auth/RegistrationScreen";
-import LoginScreen from "../auth/LoginScreen";
 import CommentsScreen from "./CommentsScreen";
 import CreatePostScreen from "./CreatePostScreen";
 import MapScreen from "./MapScreen";
@@ -20,7 +17,7 @@ import CreactePostButton from "../../components/CreatePostButton";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const Home = ({ onPress }) => {
+const Home = () => {
   return (
     <Tab.Navigator
       initialRouteName="Posts"
@@ -34,9 +31,7 @@ const Home = ({ onPress }) => {
           tabBarIcon: ({ focused, size, color }) => (
             <AntDesign name="appstore-o" size={24} color="black" />
           ),
-          headerRight: () => (
-            <LogoutIcon style={{ marginRight: 20 }} onPress={onPress} />
-          ),
+          headerRight: () => <LogoutIcon style={{ marginRight: 20 }} />,
         }}
       />
       <Tab.Screen

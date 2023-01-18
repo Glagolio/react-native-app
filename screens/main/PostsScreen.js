@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -20,6 +21,8 @@ const PostsScreen = ({ route }) => {
     console.log("posts", posts);
   }, [route]);
 
+  const { login, email } = useSelector((state) => state.auth);
+
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
@@ -28,8 +31,8 @@ const PostsScreen = ({ route }) => {
           style={styles.avatar}
         />
         <View style={{ marginLeft: 8 }}>
-          <Text style={styles.name}>Natali Romanova</Text>
-          <Text style={styles.email}>email@example.com</Text>
+          <Text style={styles.name}>{login}</Text>
+          <Text style={styles.email}>{email}</Text>
         </View>
       </View>
       <FlatList
