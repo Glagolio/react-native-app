@@ -82,31 +82,31 @@ const CreatePostScreen = ({ navigation }) => {
     const postId = uuid().toString();
 
     const storageRef = ref(storage, `postImage/${postId}`);
-    const photo = await uploadBytes(storageRef, file);
+    await uploadBytes(storageRef, file);
 
     getDownloadURL(storageRef).then((url) => setImageOnServer(url));
   };
 
   const sendPhoto = async () => {
-    const location = await Location.getCurrentPositionAsync({});
-    await uploadPhotoToServer();
-    console.log("imageOnServer", imageOnServer);
-    // await setDoc(doc(db, "posts", "la"), {
-    //   name: "Los Angeles",
-    //   state: "CA",
-    //   country: "USA",
-    // });
-    const { latitude, longitude } = location.coords;
-    await addDoc(collection(db, "posts"), {
-      user: login,
-      userId,
-      location: { latitude, longitude },
-      locationOfPhoto,
-      imageOnServer,
-    });
+    try {
+      const location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+      await uploadPhotoToServer();
+      await addDoc(collection(db, "posts"), {
+        user: login,
+        userId,
+        location: { latitude, longitude },
+        locationOfPhoto,
+        image: imageOnServer,
+        title: nameOfPhoto,
+        createdAt: Date.now(),
+      });
 
-    navigation.navigate("Posts");
-    resetForm();
+      navigation.navigate("Posts");
+      resetForm();
+    } catch (err) {
+      console.log("error", err.message);
+    }
   };
 
   const isDisabled = !image || nameOfPhoto === "" || locationOfPhoto === "";

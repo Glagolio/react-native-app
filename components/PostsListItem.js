@@ -9,7 +9,7 @@ const PostsListItem = ({ item }) => {
   return (
     <View style={{ flex: 1, marginBottom: 32 }}>
       <Image source={{ uri: item.image }} style={styles.photo} />
-      <Text style={styles.title}>{item.name}</Text>
+      <Text style={styles.title}>{item.title}</Text>
       <View
         style={{
           display: "flex",
@@ -43,7 +43,7 @@ const PostsListItem = ({ item }) => {
           }}
         >
           <EvilIcons name="location" size={24} color="#BDBDBD" />
-          <Text style={styles.comments}>{item.nameOfLocation}</Text>
+          <Text style={styles.comments}>{item.locationOfPhoto}</Text>
         </TouchableOpacity>
       </View>
     </View>

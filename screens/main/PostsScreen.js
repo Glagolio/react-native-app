@@ -9,17 +9,21 @@ import {
   TouchableOpacity,
 } from "react-native";
 import PostsListItem from "../../components/PostsListItem";
+import { collection, getDocs, orderBy } from "firebase/firestore";
+import { db } from "../../firebase/config";
 
-const PostsScreen = ({ route }) => {
+const PostsScreen = () => {
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    if (!route.params) {
-      return;
-    }
-    setPosts((prevState) => [...prevState, route.params]);
+  const getPosts = async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    setPosts(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     console.log("posts", posts);
-  }, [route]);
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
 
   const { login, email } = useSelector((state) => state.auth);
 
