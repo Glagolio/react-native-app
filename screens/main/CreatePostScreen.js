@@ -28,6 +28,9 @@ import { db } from "../../firebase/config";
 import { storage } from "../../firebase/config";
 import { useSelector } from "react-redux";
 
+// TODO =============================
+// RETURN borders radius =============================
+
 const CreatePostScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -226,13 +229,13 @@ const styles = StyleSheet.create({
     marginTop: 32,
     height: 240,
     position: "relative",
-    borderRadius: 8,
+    // borderRadius: 8,
   },
   snap: {
     width: 60,
     height: 60,
     backgroundColor: "#fff",
-    borderRadius: "50%",
+    // borderRadius: "50%",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
@@ -248,7 +251,7 @@ const styles = StyleSheet.create({
     height: "100%",
     borderColor: "#f5f",
     borderWidth: 1,
-    borderRadius: 8,
+    // borderRadius: 8,
   },
   hint: {
     marginTop: 8,
@@ -299,7 +302,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     backgroundColor: "#FF6C00",
     alignItems: "center",
-    borderRadius: 100,
+    // borderRadius: 100,
   },
   submitBtn__text: {
     color: "#fff",
