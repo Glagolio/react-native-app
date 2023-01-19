@@ -20,7 +20,6 @@ export const authSignUp =
       await updateProfile(user, {
         displayName: login,
       });
-      console.log("updated user", user);
 
       console.log("user created", user);
     } catch (err) {
@@ -31,7 +30,6 @@ export const authSignIn = (email, password) => async (dispatch, getSatte) => {
   try {
     const auth = getAuth();
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-    console.log("user signIn", user);
     dispatch(authSlice.actions.authSignIn(user));
   } catch (err) {
     console.log("error", err.message);

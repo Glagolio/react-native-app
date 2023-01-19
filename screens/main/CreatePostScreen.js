@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import uuid from "react-uuid";
 import {
   View,
   Text,
@@ -15,6 +16,17 @@ import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { MaterialIcons, EvilIcons, Feather } from "@expo/vector-icons";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { doc, setDoc, collection, addDoc } from "firebase/firestore";
+import { db } from "../../firebase/config";
+import { storage } from "../../firebase/config";
+import { useSelector } from "react-redux";
 
 const CreatePostScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -23,6 +35,9 @@ const CreatePostScreen = ({ navigation }) => {
   const [nameOfPhoto, setNameOfPhoto] = useState("");
   const [locationOfPhoto, setLocationOfPhoto] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [imageOnServer, setImageOnServer] = useState(null);
+
+  const { userId, login } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -60,15 +75,37 @@ const CreatePostScreen = ({ navigation }) => {
     setLocationOfPhoto("");
   };
 
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(image);
+    const file = await response.blob();
+
+    const postId = uuid().toString();
+
+    const storageRef = ref(storage, `postImage/${postId}`);
+    const photo = await uploadBytes(storageRef, file);
+
+    getDownloadURL(storageRef).then((url) => setImageOnServer(url));
+  };
+
   const sendPhoto = async () => {
     const location = await Location.getCurrentPositionAsync({});
-    navigation.navigate("Posts", {
-      image,
-      name: nameOfPhoto,
-      nameOfLocation: locationOfPhoto,
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
+    await uploadPhotoToServer();
+    console.log("imageOnServer", imageOnServer);
+    // await setDoc(doc(db, "posts", "la"), {
+    //   name: "Los Angeles",
+    //   state: "CA",
+    //   country: "USA",
+    // });
+    const { latitude, longitude } = location.coords;
+    await addDoc(collection(db, "posts"), {
+      user: login,
+      userId,
+      location: { latitude, longitude },
+      locationOfPhoto,
+      imageOnServer,
     });
+
+    navigation.navigate("Posts");
     resetForm();
   };
 
