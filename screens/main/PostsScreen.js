@@ -14,6 +14,7 @@ import { db } from "../../firebase/config";
 
 const PostsScreen = () => {
   const [posts, setPosts] = useState([]);
+  const { avatar } = useSelector((state) => state.auth);
 
   const getPosts = async () => {
     const querySnapshot = await getDocs(collection(db, "posts"));
@@ -35,7 +36,9 @@ const PostsScreen = () => {
     <View style={styles.container}>
       <View style={styles.userInfo}>
         <Image
-          source={require("../../assets/defaultAvatar1.jpg")}
+          source={
+            avatar ? { url: avatar } : require("../../assets/defaultAvatar.jpg")
+          }
           style={styles.avatar}
         />
         <View style={{ marginLeft: 8 }}>

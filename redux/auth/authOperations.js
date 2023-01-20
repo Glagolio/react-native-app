@@ -9,7 +9,7 @@ import {
 import authSlice from "./authSlice";
 
 export const authSignUp =
-  (email, password, login) => async (dispatch, getSatte) => {
+  (email, password, login, avatar) => async (dispatch, getSatte) => {
     try {
       const auth = getAuth();
       const { user } = await createUserWithEmailAndPassword(
@@ -19,6 +19,7 @@ export const authSignUp =
       );
       await updateProfile(user, {
         displayName: login,
+        photoURL: avatar,
       });
 
       console.log("user created", user);
@@ -30,6 +31,7 @@ export const authSignIn = (email, password) => async (dispatch, getSatte) => {
   try {
     const auth = getAuth();
     const { user } = await signInWithEmailAndPassword(auth, email, password);
+    console.log("user", user);
     dispatch(authSlice.actions.authSignIn(user));
   } catch (err) {
     console.log("error", err.message);
