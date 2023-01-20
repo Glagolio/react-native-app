@@ -22,7 +22,7 @@ const PostsListItem = ({ item }) => {
             display: "flex",
             flexDirection: "row",
           }}
-          onPress={() => navigation.navigate("Comments")}
+          onPress={() => navigation.navigate("Comments", { item })}
         >
           <EvilIcons
             name="comment"

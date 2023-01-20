@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Image, FlatList } from "react-native";
 import PostsListItem from "../../components/PostsListItem";
-import { collection, getDocs, orderBy } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  onSnapshot,
+  doc,
+  orderByChild,
+} from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 const PostsScreen = () => {
@@ -17,8 +17,12 @@ const PostsScreen = () => {
 
   const getPosts = async () => {
     const querySnapshot = await getDocs(collection(db, "posts"));
-    setPosts(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    console.log("posts", posts);
+    setPosts(
+      querySnapshot.docs
+        .map((doc) => ({ ...doc.data(), id: doc.id }))
+        .sort((a, b) => a.createdAt - b.createdAt)
+    );
+    console.log(posts);
   };
 
   useEffect(() => {

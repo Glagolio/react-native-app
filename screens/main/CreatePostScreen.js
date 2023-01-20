@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import uuid from "react-uuid";
 import {
   View,
   Text,
@@ -16,17 +15,10 @@ import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { MaterialIcons, EvilIcons, Feather } from "@expo/vector-icons";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import { doc, setDoc, collection, addDoc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import { storage } from "../../firebase/config";
 import { useSelector } from "react-redux";
+import uploadPhotoToServer from "../../services/uploadPhotoToServer";
 
 // TODO =============================
 // RETURN borders radius =============================
@@ -38,7 +30,6 @@ const CreatePostScreen = ({ navigation }) => {
   const [nameOfPhoto, setNameOfPhoto] = useState("");
   const [locationOfPhoto, setLocationOfPhoto] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [imageOnServer, setImageOnServer] = useState(null);
 
   const { userId, login } = useSelector((state) => state.auth);
 
@@ -78,32 +69,21 @@ const CreatePostScreen = ({ navigation }) => {
     setLocationOfPhoto("");
   };
 
-  const uploadPhotoToServer = async () => {
-    const response = await fetch(image);
-    const file = await response.blob();
-
-    const postId = uuid().toString();
-
-    const storageRef = ref(storage, `postImage/${postId}`);
-    await uploadBytes(storageRef, file);
-
-    getDownloadURL(storageRef).then((url) => setImageOnServer(url));
-  };
-
   const sendPhoto = async () => {
     try {
       const location = await Location.getCurrentPositionAsync({});
       const { latitude, longitude } = location.coords;
-      await uploadPhotoToServer();
-      await addDoc(collection(db, "posts"), {
+      const url = await uploadPhotoToServer(image);
+      const docOnBack = await addDoc(collection(db, "posts"), {
         user: login,
         userId,
         location: { latitude, longitude },
         locationOfPhoto,
-        image: imageOnServer,
+        image: url,
         title: nameOfPhoto,
         createdAt: Date.now(),
       });
+      console.log("docOnBack", docOnBack);
 
       navigation.navigate("Posts");
       resetForm();
