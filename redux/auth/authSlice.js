@@ -18,6 +18,7 @@ const authSlice = createSlice({
       email: payload.email,
       isAuth: true,
       userId: payload.uid,
+      avatar: payload.photoURL,
     }),
     authLogiIn: (state, { payload }) => ({
       ...state,

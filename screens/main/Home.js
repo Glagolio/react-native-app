@@ -51,6 +51,7 @@ const Home = () => {
           title: "Коментарі",
           headerLeft: () => <BackArrow style={{ marginLeft: 20 }} />,
           tabBarButton: () => null,
+          tabBarStyle: { display: "none" },
         }}
       />
       <Tab.Screen

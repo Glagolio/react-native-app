@@ -11,8 +11,11 @@ import {
   ImageBackground,
   TouchableWithoutFeedback,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { useDispatch } from "react-redux";
 import { authSignUp } from "../../redux/auth/authOperations";
+import { AntDesign } from "@expo/vector-icons";
+import uploadAvatarToServer from "../../services/uploadAvatarToServer";
 
 const RegistrationScreen = ({ navigation }) => {
   const [hidenPassword, setHidePassword] = useState({
@@ -23,6 +26,7 @@ const RegistrationScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [avatar, setAvatar] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -53,12 +57,23 @@ const RegistrationScreen = ({ navigation }) => {
     setPassword("");
   };
 
-  const handleSubmit = () => {
-    console.log({ login, email, password });
+  const handleSubmit = async () => {
+    const avatarURL = await uploadAvatarToServer(avatar);
+    dispatch(authSignUp(email, password, login, avatarURL));
     navigation.navigate("Login");
-    dispatch(authSignUp(email, password, login));
 
     resetForm();
+  };
+
+  const uploadAvatar = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    const { uri } = result.assets[0];
+    setAvatar(uri);
   };
 
   return (
@@ -75,8 +90,28 @@ const RegistrationScreen = ({ navigation }) => {
             <View style={styles.registrationForm}>
               <Image
                 style={styles.avatar}
-                source={require("../../assets/defaultAvatar1.jpg")}
+                source={
+                  avatar
+                    ? { uri: avatar }
+                    : require("../../assets/defaultAvatar.jpg")
+                }
               />
+              {avatar ? (
+                <TouchableOpacity
+                  style={styles.addAvatarBtn}
+                  onPress={() => setAvatar(null)}
+                >
+                  <AntDesign name="minuscircleo" size={24} color="#FF6C00" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.addAvatarBtn}
+                  onPress={uploadAvatar}
+                >
+                  <AntDesign name="pluscircleo" size={24} color="#FF6C00" />
+                </TouchableOpacity>
+              )}
+
               <Text style={styles.text}>Реєстрація</Text>
               <TextInput
                 style={styles.input__login}
@@ -177,13 +212,18 @@ const styles = StyleSheet.create({
   avatar: {
     position: "absolute",
     left: "50%",
-    transform: [{ translateX: -50 }, { translateY: -50 }],
+    transform: [{ translateX: -65 }, { translateY: -50 }],
     width: 120,
     height: 120,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
+  },
+  addAvatarBtn: {
+    position: "absolute",
+    top: 21,
+    left: 235,
   },
   input__login: {
     marginTop: 33,

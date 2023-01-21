@@ -15,6 +15,13 @@ import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import { MaterialIcons, EvilIcons, Feather } from "@expo/vector-icons";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../firebase/config";
+import { useSelector } from "react-redux";
+import uploadPhotoToServer from "../../services/uploadPhotoToServer";
+
+// TODO =============================
+// RETURN borders radius =============================
 
 const CreatePostScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -23,6 +30,8 @@ const CreatePostScreen = ({ navigation }) => {
   const [nameOfPhoto, setNameOfPhoto] = useState("");
   const [locationOfPhoto, setLocationOfPhoto] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+  const { userId, login } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -61,15 +70,26 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const sendPhoto = async () => {
-    const location = await Location.getCurrentPositionAsync({});
-    navigation.navigate("Posts", {
-      image,
-      name: nameOfPhoto,
-      nameOfLocation: locationOfPhoto,
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
-    resetForm();
+    try {
+      const location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+      const url = await uploadPhotoToServer(image);
+      const docOnBack = await addDoc(collection(db, "posts"), {
+        user: login,
+        userId,
+        location: { latitude, longitude },
+        locationOfPhoto,
+        image: url,
+        title: nameOfPhoto,
+        createdAt: Date.now(),
+      });
+      console.log("docOnBack", docOnBack);
+
+      navigation.navigate("Posts");
+      resetForm();
+    } catch (err) {
+      console.log("error", err.message);
+    }
   };
 
   const isDisabled = !image || nameOfPhoto === "" || locationOfPhoto === "";
@@ -189,13 +209,13 @@ const styles = StyleSheet.create({
     marginTop: 32,
     height: 240,
     position: "relative",
-    borderRadius: 8,
+    // borderRadius: 8,
   },
   snap: {
     width: 60,
     height: 60,
     backgroundColor: "#fff",
-    borderRadius: "50%",
+    // borderRadius: "50%",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
@@ -211,7 +231,7 @@ const styles = StyleSheet.create({
     height: "100%",
     borderColor: "#f5f",
     borderWidth: 1,
-    borderRadius: 8,
+    // borderRadius: 8,
   },
   hint: {
     marginTop: 8,
@@ -262,7 +282,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     backgroundColor: "#FF6C00",
     alignItems: "center",
-    borderRadius: 100,
+    // borderRadius: 100,
   },
   submitBtn__text: {
     color: "#fff",

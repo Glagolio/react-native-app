@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Image, FlatList } from "react-native";
 import PostsListItem from "../../components/PostsListItem";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  onSnapshot,
+  doc,
+  orderByChild,
+} from "firebase/firestore";
+import { db } from "../../firebase/config";
 
-const PostsScreen = ({ route }) => {
+const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
+  const { avatar } = useSelector((state) => state.auth);
+
+  const getPosts = async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    setPosts(
+      querySnapshot.docs
+        .map((doc) => ({ ...doc.data(), id: doc.id }))
+        .sort((a, b) => a.createdAt - b.createdAt)
+    );
+    console.log(posts);
+  };
 
   useEffect(() => {
-    if (!route.params) {
-      return;
-    }
-    setPosts((prevState) => [...prevState, route.params]);
-    console.log("posts", posts);
-  }, [route]);
+    getPosts();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getPosts();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const { login, email } = useSelector((state) => state.auth);
 
@@ -27,7 +43,9 @@ const PostsScreen = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.userInfo}>
         <Image
-          source={require("../../assets/defaultAvatar1.jpg")}
+          source={
+            avatar ? { url: avatar } : require("../../assets/defaultAvatar.jpg")
+          }
           style={styles.avatar}
         />
         <View style={{ marginLeft: 8 }}>
