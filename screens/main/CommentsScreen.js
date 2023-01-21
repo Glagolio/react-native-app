@@ -14,6 +14,7 @@ import { collection, addDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useSelector } from "react-redux";
 import getCurrentTime from "../../services/getCurrentTime";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CommentsScreen = ({ route, navigation }) => {
   const [inputValue, setInputValue] = useState("");
@@ -59,13 +60,6 @@ const CommentsScreen = ({ route, navigation }) => {
   useEffect(() => {
     getComments();
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      getComments();
-    });
-    return unsubscribe;
-  }, [navigation]);
 
   return (
     <View style={styles.container}>
