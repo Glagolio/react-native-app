@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { View, Text, StyleSheet, Image, FlatList } from "react-native";
 import PostsListItem from "../../components/PostsListItem";
-import {
-  collection,
-  getDocs,
-  orderBy,
-  onSnapshot,
-  doc,
-  orderByChild,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 const PostsScreen = ({ navigation }) => {
@@ -80,6 +73,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 60,
     height: 60,
+    borderRadius: 16,
   },
   name: {
     fontSize: 13,

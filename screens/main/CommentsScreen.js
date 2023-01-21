@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     marginTop: 32,
     width: "100%",
     height: 240,
+    borderRadius: 8,
   },
   inputField: {
     position: "static",
