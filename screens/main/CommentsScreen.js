@@ -15,10 +15,10 @@ import { db } from "../../firebase/config";
 import { useSelector } from "react-redux";
 import getCurrentTime from "../../services/getCurrentTime";
 
-const CommentsScreen = ({ route }) => {
+const CommentsScreen = ({ route, navigation }) => {
   const [inputValue, setInputValue] = useState("");
   const [comments, setComments] = useState([]);
-  const { userId } = useSelector((state) => state.auth);
+  const { userId, avatar } = useSelector((state) => state.auth);
   const { item } = route.params;
 
   const sendComment = async () => {
@@ -29,6 +29,7 @@ const CommentsScreen = ({ route }) => {
           userId,
           comment: inputValue,
           createdAt: Date.now(),
+          avatar: avatar,
         },
       });
       getComments();
@@ -57,8 +58,14 @@ const CommentsScreen = ({ route }) => {
 
   useEffect(() => {
     getComments();
-    console.log("useEffect comments", comments);
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getComments();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -68,11 +75,33 @@ const CommentsScreen = ({ route }) => {
           <FlatList
             data={comments}
             renderItem={({ item }) => (
-              <View style={styles.commentContainer__item}>
-                <Text style={{ marginRight: 16 }}>{item.comment.user}</Text>
+              <View
+                style={
+                  userId === item.comment.userId
+                    ? {
+                        ...styles.commentContainer__item,
+                        flexDirection: "row-reverse",
+                      }
+                    : styles.commentContainer__item
+                }
+              >
+                <Image
+                  source={{ url: item.comment.avatar }}
+                  style={
+                    userId === item.comment.userId
+                      ? { ...styles.userAvatar, marginRight: 0, marginLeft: 16 }
+                      : styles.userAvatar
+                  }
+                />
                 <View style={styles.commentField}>
                   <Text style={styles.comment}>{item.comment.comment}</Text>
-                  <Text style={styles.comment__date}>
+                  <Text
+                    style={
+                      userId === item.comment.userId
+                        ? { ...styles.comment__date, textAlign: "left" }
+                        : styles.comment__date
+                    }
+                  >
                     {getCurrentTime(item.comment.createdAt)}
                   </Text>
                 </View>
@@ -109,7 +138,7 @@ const styles = StyleSheet.create({
     height: 240,
   },
   inputField: {
-    position: "relative",
+    position: "static",
     marginBottom: 32,
   },
   input: {
@@ -167,6 +196,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 12,
     color: "#BDBDBD",
+  },
+  userAvatar: {
+    width: 28,
+    height: 28,
+    marginRight: 16,
+    borderRadius: "50%",
   },
 });
 

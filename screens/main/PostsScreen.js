@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
-const PostsScreen = () => {
+const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const { avatar } = useSelector((state) => state.auth);
 
@@ -29,6 +29,13 @@ const PostsScreen = () => {
   useEffect(() => {
     getPosts();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getPosts();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const { login, email } = useSelector((state) => state.auth);
 

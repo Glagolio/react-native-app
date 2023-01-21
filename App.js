@@ -7,7 +7,6 @@ import Main from "./components/Main";
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
     async function prepare() {
       try {
