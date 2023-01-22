@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
-import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // import SCREENS
@@ -14,7 +13,6 @@ import BackArrow from "../../components/BackArrow";
 import LogoutIcon from "../../components/LogoutIcon";
 import CreactePostButton from "../../components/CreatePostButton";
 
-const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Home = () => {

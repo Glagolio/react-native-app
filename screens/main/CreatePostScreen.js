@@ -20,9 +20,6 @@ import { db } from "../../firebase/config";
 import { useSelector } from "react-redux";
 import uploadPhotoToServer from "../../services/uploadPhotoToServer";
 
-// TODO =============================
-// RETURN borders radius =============================
-
 const CreatePostScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -122,16 +119,12 @@ const CreatePostScreen = ({ navigation }) => {
               />
             </View>
           )}
-          {/* <Image styles={styles.preview} source={} /> */}
           <TouchableOpacity
             style={image ? { ...styles.snap, opacity: 0.3 } : styles.snap}
             onPress={async () => {
               if (cameraRef) {
                 const { uri } = await cameraRef.takePictureAsync();
-                console.log(cameraRef);
-                console.log("uri", uri);
                 setImage(uri);
-                // await MediaLibrary.createAssetAsync(uri);
               }
             }}
           >
@@ -200,7 +193,7 @@ const CreatePostScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
+    // alignItems: "center",
     backgroundColor: "#fff",
     // justifyContent: 'center',
   },
@@ -209,13 +202,13 @@ const styles = StyleSheet.create({
     marginTop: 32,
     height: 240,
     position: "relative",
-    // borderRadius: 8,
+    borderRadius: 8,
   },
   snap: {
     width: 60,
     height: 60,
     backgroundColor: "#fff",
-    // borderRadius: "50%",
+    borderRadius: "50%",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
@@ -231,7 +224,7 @@ const styles = StyleSheet.create({
     height: "100%",
     borderColor: "#f5f",
     borderWidth: 1,
-    // borderRadius: 8,
+    borderRadius: 8,
   },
   hint: {
     marginTop: 8,
@@ -271,7 +264,7 @@ const styles = StyleSheet.create({
   },
   icon__location: {
     position: "absolute",
-    bottom: 15,
+    bottom: 22,
     left: 0,
   },
   submitBtn: {
@@ -282,7 +275,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     backgroundColor: "#FF6C00",
     alignItems: "center",
-    // borderRadius: 100,
+    borderRadius: 100,
   },
   submitBtn__text: {
     color: "#fff",

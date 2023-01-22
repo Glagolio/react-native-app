@@ -8,17 +8,22 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { collection, addDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useSelector } from "react-redux";
 import getCurrentTime from "../../services/getCurrentTime";
-import { useFocusEffect } from "@react-navigation/native";
 
 const CommentsScreen = ({ route, navigation }) => {
   const [inputValue, setInputValue] = useState("");
   const [comments, setComments] = useState([]);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
   const { userId, avatar } = useSelector((state) => state.auth);
   const { item } = route.params;
 
@@ -59,64 +64,89 @@ const CommentsScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     getComments();
+
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setIsShowKeyboard(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setIsShowKeyboard(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Image source={{ url: item.image }} style={styles.image} />
-        <SafeAreaView style={styles.commentsContainer}>
-          <FlatList
-            data={comments}
-            renderItem={({ item }) => (
-              <View
-                style={
-                  userId === item.comment.userId
-                    ? {
-                        ...styles.commentContainer__item,
-                        flexDirection: "row-reverse",
-                      }
-                    : styles.commentContainer__item
-                }
-              >
-                <Image
-                  source={{ url: item.comment.avatar }}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View>
+          {!isShowKeyboard && (
+            <Image source={{ url: item.image }} style={styles.image} />
+          )}
+
+          <SafeAreaView style={styles.commentsContainer}>
+            <FlatList
+              data={comments}
+              renderItem={({ item }) => (
+                <View
                   style={
                     userId === item.comment.userId
-                      ? { ...styles.userAvatar, marginRight: 0, marginLeft: 16 }
-                      : styles.userAvatar
+                      ? {
+                          ...styles.commentContainer__item,
+                          flexDirection: "row-reverse",
+                        }
+                      : styles.commentContainer__item
                   }
-                />
-                <View style={styles.commentField}>
-                  <Text style={styles.comment}>{item.comment.comment}</Text>
-                  <Text
+                >
+                  <Image
+                    source={{ url: item.comment.avatar }}
                     style={
                       userId === item.comment.userId
-                        ? { ...styles.comment__date, textAlign: "left" }
-                        : styles.comment__date
+                        ? {
+                            ...styles.userAvatar,
+                            marginRight: 0,
+                            marginLeft: 16,
+                          }
+                        : styles.userAvatar
                     }
-                  >
-                    {getCurrentTime(item.comment.createdAt)}
-                  </Text>
+                  />
+                  <View style={styles.commentField}>
+                    <Text style={styles.comment}>{item.comment.comment}</Text>
+                    <Text
+                      style={
+                        userId === item.comment.userId
+                          ? { ...styles.comment__date, textAlign: "left" }
+                          : styles.comment__date
+                      }
+                    >
+                      {getCurrentTime(item.comment.createdAt)}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            )}
-            keyExtractor={(item) => item.id}
-          />
-        </SafeAreaView>
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          </SafeAreaView>
+        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        >
+          <View style={styles.inputField}>
+            <TextInput
+              style={styles.input}
+              placeholder="Коментувати..."
+              value={inputValue}
+              onChangeText={setInputValue}
+            />
+            <TouchableOpacity style={styles.buttonField} onPress={sendComment}>
+              <AntDesign name="arrowup" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </View>
-      <View style={styles.inputField}>
-        <TextInput
-          style={styles.input}
-          placeholder="Коментувати..."
-          value={inputValue}
-          onChangeText={setInputValue}
-        />
-        <TouchableOpacity style={styles.buttonField} onPress={sendComment}>
-          <AntDesign name="arrowup" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
@@ -130,10 +160,11 @@ const styles = StyleSheet.create({
     marginTop: 32,
     width: "100%",
     height: 240,
+    borderRadius: 8,
   },
   inputField: {
-    position: "static",
     marginBottom: 32,
+    width: "100%",
   },
   input: {
     heigth: "100%",
