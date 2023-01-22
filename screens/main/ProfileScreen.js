@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     position: "relative",
     width: "100%",
     // TODO Remove Height
-    height: 549,
+    height: 600,
     backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -121,8 +121,10 @@ const styles = StyleSheet.create({
   },
   avatarField: {
     position: "absolute",
+    // left: "50%",
+    top: 0,
     left: "50%",
-    // transform: [{ translateX: -65 }, { translateY: -50 }],
+    transform: [{ translateX: 20 }, { translateY: -10 }],
   },
   addAvatarBtn: {
     position: "absolute",
